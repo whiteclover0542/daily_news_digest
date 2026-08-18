@@ -10,6 +10,7 @@ venv/
 node_modules/
 .next/
 dist/
+dev-dist/
 build/
 .env.local
 
