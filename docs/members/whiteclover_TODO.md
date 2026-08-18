@@ -5,7 +5,7 @@
 ## 할 일
 
 1. 배포 환경 구축 (Vercel + Render + Neon) — Neon은 완료. PR #25가 dev에 머지되기 전까진 Render/Vercel 둘 다 기본 브랜치(dev/main)에 backend·frontend 코드가 없어서 빌드 실패함 — PR 머지 후 이어서 진행하거나, 급하면 두 서비스 다 Branch를 whiteclover로 임시 지정해서 배포
-2. HTTPS / 도메인 설정
+2. HTTPS / 도메인 설정 — 커스텀 도메인 계획 없음. Vercel/Render 기본 도메인은 HTTPS 자동 적용이라 별도 작업 불필요, 배포 완료되면 정상 적용됐는지만 확인
 3. 알림 발송 로직 — 로그인 없이 이메일 등록 방식 등 검토 (웹 푸시 / 이메일)
 4. 알림 설정 화면
 5. 키워드 트렌드 시각화 화면
