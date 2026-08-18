@@ -2,7 +2,7 @@
 
 > 팀원이 각자 작업 완료 시 직접 갱신하는 문서입니다.
 > 상태 바뀌면 `docs: 진행로그 업데이트` 로 커밋해 주세요.
-> **최종 수정:** 2026-08-17 (문서 최초 생성)
+> **최종 수정:** 2026-08-18 (PR #25 반영)
 
 ## 상태 표기
 - ⬜ 시작 전  |  🟡 진행 중  |  🔵 리뷰 중(PR)  |  ✅ 완료  |  ⛔ 막힘(blocked)
@@ -13,8 +13,8 @@
 
 | 영역 | 진행률 |
 |------|--------|
-| 프로젝트 기반 작업 (공통) | ⬜ 0/6 |
-| MVP 핵심 기능 6개 | ⬜ 0/6 |
+| 프로젝트 기반 작업 (공통) | 🟡 3/6 (✅), 2개 🔵 리뷰 중 |
+| MVP 핵심 기능 6개 | 🟡 1/6 (✅), 1개 🔵 리뷰 중 |
 | 확장 기능 3개 | ⬜ 0/3 |
 
 ---
@@ -25,8 +25,8 @@
 |---|------|------|------|------|
 | 0-1 | Git 레포 생성 & 문서 정비 | 공통 | ✅ | 폴더 구조, 기획서, docs/ 문서 정비 |
 | 0-2 | 뉴스 소스 조사 (RSS vs API) | hoya | ⬜ | 기획서 12장 체크리스트 |
-| 0-3 | DB 종류/스키마 확정 | 공통 | 🔵 | docs/db-schema.md — PostgreSQL로 확정, hoya 리뷰 필요 |
-| 0-4 | API 명세 확정 | 공통 | 🔵 | docs/api-spec.md — /news, /news/{id}, /categories 상세화, hoya 리뷰 필요 |
+| 0-3 | DB 종류/스키마 확정 | 공통 | 🔵 | docs/db-schema.md — PostgreSQL로 확정, hoya 리뷰 필요 (PR #25) |
+| 0-4 | API 명세 확정 | 공통 | 🔵 | docs/api-spec.md — /news, /news/{id}, /categories 상세화, hoya 리뷰 필요 (PR #25) |
 | 0-5 | GitHub Issues/Projects 세팅 | 공통 | ✅ | 이슈 24개(#1~#24) + Projects 보드(Todo/In Progress/In Review/Done) 생성 완료 |
 | 0-6 | 배포 환경 선정 | whiteclover | ✅ | Vercel(프론트) + Render(백엔드) + Neon(DB) — docs/deployment.md |
 
@@ -53,13 +53,13 @@
 ### ④ DB 적재
 | 파트 | 담당 | 상태 | 비고 |
 |------|------|------|------|
-| 모델 정의 & 적재 | hoya·whiteclover | 🔵 | backend/app/models — Article/Category/Keyword 모델 + upsert_article 헬퍼 초안, hoya 리뷰 필요 |
+| 모델 정의 & 적재 | hoya·whiteclover | 🔵 | backend/app/models — Article/Category/Keyword 모델 + upsert_article 헬퍼 초안, hoya 리뷰 필요 (PR #25) |
 
 ### ⑤ 백엔드 API
 | 파트 | 담당 | 상태 | 비고 |
 |------|------|------|------|
-| 뉴스 목록/상세 API | whiteclover | ✅ | GET /news, GET /news/{id} — 실제 서버 구동해 동작 확인 완료 |
-| 카테고리 API | whiteclover | ✅ | GET /categories — 동작 확인 완료 |
+| 뉴스 목록/상세 API | whiteclover | ✅ | GET /news, GET /news/{id} — 실제 서버 구동해 동작 확인 완료 (PR #25) |
+| 카테고리 API | whiteclover | ✅ | GET /categories — 동작 확인 완료 (PR #25) |
 
 ### ⑥ 프론트엔드 (PWA)
 | 파트 | 담당 | 상태 | 비고 |
