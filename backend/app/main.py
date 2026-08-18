@@ -15,3 +15,8 @@ app.add_middleware(
 
 app.include_router(news.router, prefix="/api")
 app.include_router(categories.router, prefix="/api")
+
+
+@app.get("/health")
+def health() -> dict[str, str]:
+    return {"status": "ok"}
