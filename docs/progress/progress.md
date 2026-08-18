@@ -25,10 +25,10 @@
 |---|------|------|------|------|
 | 0-1 | Git 레포 생성 & 문서 정비 | 공통 | ✅ | 폴더 구조, 기획서, docs/ 문서 정비 |
 | 0-2 | 뉴스 소스 조사 (RSS vs API) | hoya | ⬜ | 기획서 12장 체크리스트 |
-| 0-3 | DB 종류/스키마 확정 | 공통 | ⬜ | docs/db-schema.md |
-| 0-4 | API 명세 확정 | 공통 | ⬜ | docs/api-spec.md |
-| 0-5 | GitHub Issues/Projects 세팅 | 공통 | ⬜ | 태스크 관리용 칸반보드 |
-| 0-6 | 배포 환경 선정 | whiteclover | ⬜ | Vercel(프론트) + Render/Railway(백엔드) |
+| 0-3 | DB 종류/스키마 확정 | 공통 | 🔵 | docs/db-schema.md — PostgreSQL로 확정, hoya 리뷰 필요 |
+| 0-4 | API 명세 확정 | 공통 | 🔵 | docs/api-spec.md — /news, /news/{id}, /categories 상세화, hoya 리뷰 필요 |
+| 0-5 | GitHub Issues/Projects 세팅 | 공통 | ✅ | 이슈 24개(#1~#24) + Projects 보드(Todo/In Progress/In Review/Done) 생성 완료 |
+| 0-6 | 배포 환경 선정 | whiteclover | ✅ | Vercel(프론트) + Render(백엔드) + Neon(DB) — docs/deployment.md |
 
 ---
 
@@ -53,13 +53,13 @@
 ### ④ DB 적재
 | 파트 | 담당 | 상태 | 비고 |
 |------|------|------|------|
-| 모델 정의 & 적재 | hoya·whiteclover | ⬜ | backend/app/models |
+| 모델 정의 & 적재 | hoya·whiteclover | 🔵 | backend/app/models — Article/Category/Keyword 모델 + upsert_article 헬퍼 초안, hoya 리뷰 필요 |
 
 ### ⑤ 백엔드 API
 | 파트 | 담당 | 상태 | 비고 |
 |------|------|------|------|
-| 뉴스 목록/상세 API | whiteclover | ⬜ | GET /news, GET /news/{id} |
-| 카테고리 API | whiteclover | ⬜ | GET /categories |
+| 뉴스 목록/상세 API | whiteclover | ✅ | GET /news, GET /news/{id} — 실제 서버 구동해 동작 확인 완료 |
+| 카테고리 API | whiteclover | ✅ | GET /categories — 동작 확인 완료 |
 
 ### ⑥ 프론트엔드 (PWA)
 | 파트 | 담당 | 상태 | 비고 |
