@@ -4,6 +4,7 @@
 
 - [api-spec.md](./api-spec.md) — 백엔드 API 명세
 - [db-schema.md](./db-schema.md) — DB 스키마 설계
+- [deployment.md](./deployment.md) — 배포 환경 (프론트/백엔드/DB 호스팅)
 - [progress/](./progress/README.md) — 주간 진행 로그
 - [GIT_GUIDE.md](./GIT_GUIDE.md) — Git 사용법 & 브랜치 관리
 
