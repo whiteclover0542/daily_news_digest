@@ -47,4 +47,20 @@
 
 PK: `(article_id, keyword_id)` 복합키. 키워드를 별도 테이블로 분리해 확장 기능(⑧ 키워드 트렌드 시각화)에서 집계 쿼리(`GROUP BY keyword_id`)를 바로 활용할 수 있게 함.
 
-> 로그인/사용자 계정, 관심 카테고리 구독 기능은 없음. 알림 설정(확장 기능)은 로그인 없이(예: 이메일 주소만으로) 동작하는 구조로 설계 예정 — 별도 `email_subscriptions(email)` 테이블 정도로 충분, MVP 이후 착수.
+> 로그인/사용자 계정, 관심 카테고리 구독 기능은 없음.
+
+### push_subscriptions (웹 푸시 구독)
+
+이메일 대신 브라우저 Web Push로 결정 — 이미 PWA(서비스워커)가 있어서 별도 이메일 발송 서비스 계정 없이 자체 발급 VAPID 키만으로 동작 가능.
+
+| 컬럼 | 타입 | 제약 | 설명 |
+|---|---|---|---|
+| id | SERIAL | PK | |
+| endpoint | TEXT | UNIQUE NOT NULL | 브라우저가 발급한 푸시 엔드포인트 URL (구독 식별자) |
+| p256dh | TEXT | NOT NULL | 구독 공개키 (Web Push 암호화용) |
+| auth | TEXT | NOT NULL | 구독 인증 시크릿 |
+| created_at | TIMESTAMPTZ | NOT NULL DEFAULT now() | 구독 시각 |
+
+발송 로직(`app/services/push.py`, 구독자 전원 순회 + `pywebpush`로 전송, 404/410 응답 오는 만료 구독은 자동 정리)은 구현 완료. 실행에 필요한 `VAPID_PUBLIC_KEY`/`VAPID_PRIVATE_KEY`/`VAPID_SUBJECT` 환경변수는 `.env.example` 참고, 실제 키는 로컬에서 `npx web-push generate-vapid-keys`로 생성.
+
+수동 트리거: `python scripts/send_push.py "제목" "본문" [url]` — 스케줄러가 아직 없어서 로컬/CLI로 직접 실행. "매일 아침 자동 발송"은 콘텐츠 파이프라인·스케줄러 완성 후 그 트리거에서 이 함수를 호출하도록 연결 예정.
