@@ -4,15 +4,28 @@
 
 ## 할 일
 
-1. 배포 환경 구축 (Vercel + Render + Neon) — Neon은 완료. PR #25가 dev에 머지되기 전까진 Render/Vercel 둘 다 기본 브랜치(dev/main)에 backend·frontend 코드가 없어서 빌드 실패함 — PR 머지 후 이어서 진행하거나, 급하면 두 서비스 다 Branch를 whiteclover로 임시 지정해서 배포
-2. HTTPS / 도메인 설정 — 커스텀 도메인 계획 없음. Vercel/Render 기본 도메인은 HTTPS 자동 적용이라 별도 작업 불필요, 배포 완료되면 정상 적용됐는지만 확인
-3. 알림 발송 로직 — 로그인 없이 이메일 등록 방식 등 검토 (웹 푸시 / 이메일)
-4. 알림 설정 화면
-5. 키워드 트렌드 시각화 화면
-6. 검색 API
-7. 검색 화면
+1. 알림 발송 로직 — 로그인 없이 이메일 등록 방식 등 검토 (웹 푸시 / 이메일)
+2. 알림 설정 화면
+3. 키워드 트렌드 시각화 화면
+4. 검색 API
+5. 검색 화면
 
 ---
+
+## 2026-08-20
+
+### 오늘 목표
+- PR #25 머지 후 배포 환경 구축 마무리 (Render + Vercel)
+
+### 오늘 한 일
+- PR #25(whiteclover → dev) 머지 확인, 로컬 dev/whiteclover 브랜치 동기화
+- Render Blueprint(render.yaml) 작성 — rootDir/build/start command 자동화, branch는 dev로 고정
+- Render 배포 중 `CORS_ORIGINS` 파싱 에러 발생 — pydantic-settings가 `list[str]` 필드는 field_validator보다 먼저 JSON 디코딩을 시도한다는 걸 확인, `NoDecode` 어노테이션으로 우회해서 콤마 구분 문자열을 받도록 수정 (로컬 임시 venv로 재현·검증 후 배포)
+- Render 배포 성공, 다만 `/api/news`·`/api/categories`가 500 — Neon(통합 브랜치)엔 테이블이 없었던 것(마이그레이션 도구 없이 seed 스크립트로만 테이블 생성했는데 로컬 SQLite에만 실행해봤음)이 원인. 로컬에서 Neon 통합 브랜치 대상으로 `scripts/seed_dev_data.py` 실행해 테이블 생성 + 더미 기사 2건 시딩, API 정상 응답 확인
+- 공용 PC에서 DB 커넥션 문자열을 PowerShell에 직접 입력한 것 인지 → PSReadLine 히스토리 파일에 평문으로 남는 문제 확인, 삭제 안내
+- Vercel CLI로 frontend 프로젝트 생성·연결, `VITE_API_BASE_URL`(production/preview) 환경변수 등록, production 배포
+- Render `CORS_ORIGINS`에 Vercel 프로덕션 도메인 추가, curl로 실제 Origin 헤더 넣어 `access-control-allow-origin` 정상 응답 확인
+- progress.md 배포 환경 구축·HTTPS/도메인 항목 ✅ 로 갱신
 
 ## 2026-08-18
 
