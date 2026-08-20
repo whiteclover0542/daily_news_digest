@@ -2,7 +2,7 @@
 
 > 팀원이 각자 작업 완료 시 직접 갱신하는 문서입니다.
 > 상태 바뀌면 `docs: 진행로그 업데이트` 로 커밋해 주세요.
-> **최종 수정:** 2026-08-20 (배포 완료 반영)
+> **최종 수정:** 2026-08-18 (PR #25 반영)
 
 ## 상태 표기
 - ⬜ 시작 전  |  🟡 진행 중  |  🔵 리뷰 중(PR)  |  ✅ 완료  |  ⛔ 막힘(blocked)
@@ -96,9 +96,9 @@
 
 | 항목 | 담당 | 상태 | 비고 |
 |------|------|------|------|
-| 배포 환경 구축 | whiteclover | ✅ | Render(백엔드, dev 브랜치) + Vercel(프론트, production) + Neon(통합 브랜치) 연결, CORS 설정 및 시딩 데이터로 API 동작 확인 완료 |
+| 배포 환경 구축 | whiteclover | ⬜ | Vercel(프론트) + Render/Railway(백엔드) |
 | 스케줄러 자동 실행 설정 | hoya | ⬜ | GitHub Actions cron 또는 APScheduler |
-| HTTPS / 도메인 | whiteclover | ✅ | Render/Vercel 기본 도메인 HTTPS 자동 적용 확인 (커스텀 도메인 계획 없음) |
+| HTTPS / 도메인 | whiteclover | ⬜ | |
 
 ---
 

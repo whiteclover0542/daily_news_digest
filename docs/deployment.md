@@ -14,16 +14,8 @@ Render 무료 웹 서비스는 미사용 시 슬립 상태가 되므로, 백엔�
 
 ## TODO (배포 시점에 진행)
 
-- [x] Render 웹 서비스 생성 & 환경변수 설정 — render.yaml Blueprint, branch: dev
-- [x] Neon 프로젝트 생성 & 커넥션 문자열 발급 — 통합 브랜치 pooled 커넥션 사용
-- [x] Vercel 프로젝트 연결 (frontend 레포/폴더) — vercel CLI로 생성, production 배포 완료
-- [x] 프론트 → 백엔드 API 호출 CORS 설정 — CORS_ORIGINS에 Vercel 프로덕션 도메인 추가, 응답 헤더로 확인
-- [x] HTTPS/도메인 확인 (둘 다 기본 제공 도메인으로 충분, 커스텀 도메인은 선택) — 둘 다 https 기본 도메인으로 정상 접속 확인
-
-## 배포 URL
-
-| 영역 | URL |
-|---|---|
-| 프론트엔드 (Vercel) | https://frontend-kohl-ten-uqrg4vvv18.vercel.app |
-| 백엔드 API (Render) | https://daily-news-digest-api.onrender.com |
-| 헬스체크 | https://daily-news-digest-api.onrender.com/health |
+- [ ] Render 웹 서비스 생성 & 환경변수 설정
+- [ ] Neon 프로젝트 생성 & 커넥션 문자열 발급
+- [ ] Vercel 프로젝트 연결 (frontend 레포/폴더)
+- [ ] 프론트 → 백엔드 API 호출 CORS 설정
+- [ ] HTTPS/도메인 확인 (둘 다 기본 제공 도메인으로 충분, 커스텀 도메인은 선택)
