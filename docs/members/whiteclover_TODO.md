@@ -4,8 +4,8 @@
 
 ## 할 일
 
-1. 알림 발송 로직 — 로그인 없이 이메일 등록 방식 등 검토 (웹 푸시 / 이메일)
-2. 알림 설정 화면
+1. 알림 발송 로직 — 백엔드 구독/해지 API, 실제 발송 함수(`send_push_to_all`)까지 완료. 남은 것: 콘텐츠 파이프라인·스케줄러 완성되면 그 트리거에서 이 함수를 호출하도록 연결
+2. 알림 설정 화면 — 프론트에서 구독 API 붙여서 켜기/끄기 UI, 서비스워커 push 이벤트 핸들러
 3. 키워드 트렌드 시각화 화면
 4. 검색 API
 5. 검색 화면
@@ -26,6 +26,14 @@
 - Vercel CLI로 frontend 프로젝트 생성·연결, `VITE_API_BASE_URL`(production/preview) 환경변수 등록, production 배포
 - Render `CORS_ORIGINS`에 Vercel 프로덕션 도메인 추가, curl로 실제 Origin 헤더 넣어 `access-control-allow-origin` 정상 응답 확인
 - progress.md 배포 환경 구축·HTTPS/도메인 항목 ✅ 로 갱신
+- 배포 핫픽스 4개 커밋을 PR 없이 dev에 바로 올렸던 것을 발견 → dev에서 되돌리고(3b24738), whiteclover 브랜치에 그대로 남겨서 정식 PR로 다시 올릴 수 있게 정리(158d17b). 이미 배포된 Render/Vercel 서비스 자체는 git 히스토리와 무관하게 계속 정상 동작 중
+- 알림 발송 방식 결정: 이메일 대신 웹 푸시 — PWA에 서비스워커가 이미 있어서 이메일 발송 계정 없이 자체 VAPID 키만으로 구현 가능
+- `push_subscriptions` 모델(endpoint/p256dh/auth) 추가, `subscribe_push`(endpoint 중복 시 키만 갱신하는 멱등 처리)·`unsubscribe_push` CRUD 헬퍼 작성
+- `POST /api/subscriptions/push`, `POST /api/subscriptions/push/unsubscribe` API 구현, main.py에 라우터 연결 + CORS `allow_methods`에 POST 추가
+- docs/db-schema.md, docs/api-spec.md에 push_subscriptions 테이블·API 명세 반영
+- `app/services/push.py`(send_push_to_all) 구현 — pywebpush로 구독자 전원 발송, 404/410(만료) 응답 오는 구독은 자동 삭제. 수동 트리거용 `scripts/send_push.py`도 추가 (스케줄러 붙기 전까지 CLI로 발송 테스트)
+- VAPID 키 로컬에서 `npx web-push generate-vapid-keys`로 발급, config.py에 VAPID_PUBLIC_KEY/PRIVATE_KEY/SUBJECT 설정 추가
+- webpush 함수를 mock해서 정상 발송 1건 + 만료(410) 구독 자동 정리 1건 동작 로컬 검증
 
 ## 2026-08-18
 

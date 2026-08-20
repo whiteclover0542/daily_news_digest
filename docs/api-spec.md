@@ -80,6 +80,33 @@
 ]
 ```
 
+### POST /subscriptions/push — 웹 푸시 구독 등록
+
+브라우저 `PushManager.subscribe()` 결과를 그대로 전달. 이미 등록된 endpoint면 키만 갱신(멱등).
+
+**Request Body**
+
+```json
+{
+  "endpoint": "https://fcm.googleapis.com/fcm/send/...",
+  "keys": { "p256dh": "...", "auth": "..." }
+}
+```
+
+**Response**: 204 No Content
+
+### POST /subscriptions/push/unsubscribe — 웹 푸시 구독 해지
+
+**Request Body**
+
+```json
+{ "endpoint": "https://fcm.googleapis.com/fcm/send/..." }
+```
+
+**Response**: 204 No Content
+**Response 404**: 해당 endpoint로 등록된 구독이 없을 때 — `{ "detail": "Subscription not found" }`
+
 ---
 
 > 확장 기능(검색, 트렌드) 엔드포인트는 MVP 이후 추가. (관심 카테고리 구독 기능은 없음)
+> 실제 알림 발송은 REST 엔드포인트가 아니라 `app/services/push.py`의 `send_push_to_all()` + `scripts/send_push.py`(수동 트리거)로 구현. "매일 아침 자동 발송"은 스케줄러가 이 함수를 호출하도록 붙이는 일만 남음.

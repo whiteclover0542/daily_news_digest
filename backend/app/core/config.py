@@ -7,6 +7,9 @@ from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 class Settings(BaseSettings):
     database_url: str
     cors_origins: Annotated[list[str], NoDecode] = ["http://localhost:5173"]
+    vapid_public_key: str = ""
+    vapid_private_key: str = ""
+    vapid_subject: str = "mailto:admin@example.com"
 
     @field_validator("cors_origins", mode="before")
     @classmethod
