@@ -4,11 +4,31 @@
 
 ## 할 일
 
-1. 알림 발송 로직 — 백엔드 구독/해지 API, 실제 발송 함수(`send_push_to_all`)까지 완료. 남은 것: 콘텐츠 파이프라인·스케줄러 완성되면 그 트리거에서 이 함수를 호출하도록 연결
-2. 알림 설정 화면 — 프론트에서 구독 API 붙여서 켜기/끄기 UI, 서비스워커 push 이벤트 핸들러
-3. 키워드 트렌드 시각화 화면
-4. 검색 API
-5. 검색 화면
+1. hoya에게 AI 파이프라인 인수인계 내용 전달 (아래 2026-08-31 참고)
+2. 알림 발송 로직 — 백엔드 구독/해지 API, 실제 발송 함수(`send_push_to_all`)까지 완료. 남은 것: 콘텐츠 파이프라인·스케줄러 완성되면 그 트리거에서 이 함수를 호출하도록 연결
+3. 알림 설정 화면 — 프론트에서 구독 API 붙여서 켜기/끄기 UI, 서비스워커 push 이벤트 핸들러
+4. 키워드 트렌드 시각화 화면
+5. 검색 API
+6. 검색 화면
+
+---
+
+## 2026-08-31
+
+### 오늘 목표
+- PR #26 정리, dev 배포 확인, hoya 인수인계 정리
+
+### 오늘 한 일
+- whiteclover 브랜치(PR #26 재구성 + 웹 푸시) dev에 머지·push, Render 재배포 Live 확인
+- whiteclover 브랜치 로컬/원격 삭제
+- 8/20 항목 축약
+
+### hoya 전달 사항 (AI/데이터 파이프라인 인수인계)
+- DB: Neon 커넥션 문자열은 별도 채널로 전달 (채팅/커밋 금지 — PSReadLine 평문 노출 전례 있음)
+- 적재: `upsert_article()`(app/models/crud.py) 재사용, 카테고리 slug는 politics/economy/it/sports/culture로 고정
+- 스케줄러: Render 무료 티어 슬립 때문에 APScheduler 대신 GitHub Actions cron 권장 (docs/deployment.md)
+- 알림 연동: 파이프라인 마지막 단계에서 `send_push_to_all()`(app/services/push.py) 호출 필요
+- 배포: dev push 시 Render 자동배포(render.yaml). 별도 워커/cron 서비스면 render.yaml 추가 필요, 새 env var는 Render 대시보드에도 등록
 
 ---
 
@@ -18,22 +38,17 @@
 - PR #25 머지 후 배포 환경 구축 마무리 (Render + Vercel)
 
 ### 오늘 한 일
-- PR #25(whiteclover → dev) 머지 확인, 로컬 dev/whiteclover 브랜치 동기화
-- Render Blueprint(render.yaml) 작성 — rootDir/build/start command 자동화, branch는 dev로 고정
-- Render 배포 중 `CORS_ORIGINS` 파싱 에러 발생 — pydantic-settings가 `list[str]` 필드는 field_validator보다 먼저 JSON 디코딩을 시도한다는 걸 확인, `NoDecode` 어노테이션으로 우회해서 콤마 구분 문자열을 받도록 수정 (로컬 임시 venv로 재현·검증 후 배포)
-- Render 배포 성공, 다만 `/api/news`·`/api/categories`가 500 — Neon(통합 브랜치)엔 테이블이 없었던 것(마이그레이션 도구 없이 seed 스크립트로만 테이블 생성했는데 로컬 SQLite에만 실행해봤음)이 원인. 로컬에서 Neon 통합 브랜치 대상으로 `scripts/seed_dev_data.py` 실행해 테이블 생성 + 더미 기사 2건 시딩, API 정상 응답 확인
-- 공용 PC에서 DB 커넥션 문자열을 PowerShell에 직접 입력한 것 인지 → PSReadLine 히스토리 파일에 평문으로 남는 문제 확인, 삭제 안내
-- Vercel CLI로 frontend 프로젝트 생성·연결, `VITE_API_BASE_URL`(production/preview) 환경변수 등록, production 배포
-- Render `CORS_ORIGINS`에 Vercel 프로덕션 도메인 추가, curl로 실제 Origin 헤더 넣어 `access-control-allow-origin` 정상 응답 확인
-- progress.md 배포 환경 구축·HTTPS/도메인 항목 ✅ 로 갱신
-- 배포 핫픽스 4개 커밋을 PR 없이 dev에 바로 올렸던 것을 발견 → dev에서 되돌리고(3b24738), whiteclover 브랜치에 그대로 남겨서 정식 PR로 다시 올릴 수 있게 정리(158d17b). 이미 배포된 Render/Vercel 서비스 자체는 git 히스토리와 무관하게 계속 정상 동작 중
-- 알림 발송 방식 결정: 이메일 대신 웹 푸시 — PWA에 서비스워커가 이미 있어서 이메일 발송 계정 없이 자체 VAPID 키만으로 구현 가능
-- `push_subscriptions` 모델(endpoint/p256dh/auth) 추가, `subscribe_push`(endpoint 중복 시 키만 갱신하는 멱등 처리)·`unsubscribe_push` CRUD 헬퍼 작성
-- `POST /api/subscriptions/push`, `POST /api/subscriptions/push/unsubscribe` API 구현, main.py에 라우터 연결 + CORS `allow_methods`에 POST 추가
-- docs/db-schema.md, docs/api-spec.md에 push_subscriptions 테이블·API 명세 반영
-- `app/services/push.py`(send_push_to_all) 구현 — pywebpush로 구독자 전원 발송, 404/410(만료) 응답 오는 구독은 자동 삭제. 수동 트리거용 `scripts/send_push.py`도 추가 (스케줄러 붙기 전까지 CLI로 발송 테스트)
-- VAPID 키 로컬에서 `npx web-push generate-vapid-keys`로 발급, config.py에 VAPID_PUBLIC_KEY/PRIVATE_KEY/SUBJECT 설정 추가
-- webpush 함수를 mock해서 정상 발송 1건 + 만료(410) 구독 자동 정리 1건 동작 로컬 검증
+- PR #25 머지 확인, 브랜치 동기화
+- Render Blueprint(render.yaml) 작성, `CORS_ORIGINS` 파싱 에러는 `NoDecode`로 해결
+- Render 배포 후 500 에러 → Neon에 테이블 없던 게 원인, seed 스크립트로 해결
+- PSReadLine 히스토리에 DB 커넥션 문자열 평문 노출 확인, 삭제 안내
+- Vercel 프로젝트 연결·환경변수 등록·production 배포
+- CORS에 Vercel 도메인 추가 후 curl로 정상 동작 확인, progress.md 갱신
+- 배포 핫픽스 4개가 PR 없이 dev에 올라간 걸 발견 → 되돌리고 whiteclover에서 재정리
+- 알림 발송은 이메일 대신 웹 푸시로 결정 (서비스워커 재사용, VAPID만 필요)
+- push_subscriptions 모델/CRUD, 구독·해지 API, 관련 문서 반영
+- send_push_to_all 구현(만료 구독 자동 삭제) + 수동 발송 스크립트 추가
+- VAPID 키 발급·설정, mock으로 발송/만료 정리 로컬 검증
 
 ## 2026-08-18
 
