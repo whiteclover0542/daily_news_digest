@@ -2,7 +2,7 @@
 
 > 팀원이 각자 작업 완료 시 직접 갱신하는 문서입니다.
 > 상태 바뀌면 `docs: 진행로그 업데이트` 로 커밋해 주세요.
-> **최종 수정:** 2026-08-18 (PR #25 반영)
+> **최종 수정:** 2026-08-20 (배포 완료 + 웹 푸시 알림 백엔드 착수 반영)
 
 ## 상태 표기
 - ⬜ 시작 전  |  🟡 진행 중  |  🔵 리뷰 중(PR)  |  ✅ 완료  |  ⛔ 막힘(blocked)
@@ -15,7 +15,7 @@
 |------|--------|
 | 프로젝트 기반 작업 (공통) | 🟡 3/6 (✅), 2개 🔵 리뷰 중 |
 | MVP 핵심 기능 6개 | 🟡 2/6 (✅), 1개 🔵 리뷰 중 |
-| 확장 기능 3개 | ⬜ 0/3 |
+| 확장 기능 3개 | 🟡 0/3 (✅), 1개 🟡 진행 중 |
 
 ---
 
@@ -53,7 +53,7 @@
 ### ④ DB 적재
 | 파트 | 담당 | 상태 | 비고 |
 |------|------|------|------|
-| 모델 정의 & 적재 | hoya·whiteclover | 🔵 | backend/app/models — Article/Category/Keyword 모델 + upsert_article 헬퍼 초안, hoya 리뷰 필요 (PR #25) |
+| 모델 정의 & 적재 | hoya·whiteclover | ✅ | backend/app/models — Article/Category/Keyword 모델 + upsert_article 헬퍼 (PR #25) |
 
 ### ⑤ 백엔드 API
 | 파트 | 담당 | 상태 | 비고 |
@@ -75,8 +75,8 @@
 ### ⑦ 알림 (웹 푸시 / 이메일)
 | 파트 | 담당 | 상태 | 비고 |
 |------|------|------|------|
-| 알림 발송 로직 | whiteclover | ⬜ | 로그인 없이 이메일 등록 방식 등 검토 |
-| 설정 화면 | whiteclover | ⬜ | |
+| 알림 발송 로직 | whiteclover | 🟡 | 웹 푸시로 결정(이메일 대신) — PWA 서비스워커가 이미 있어 별도 이메일 발송 계정 없이 자체 VAPID 키만으로 동작. `push_subscriptions` 모델, 구독/해지 API, `send_push_to_all()`(pywebpush, 만료 구독 자동정리) 구현·검증 완료. 남은 건 스케줄러가 이 함수를 호출하도록 연결하는 것뿐 |
+| 설정 화면 | whiteclover | ⬜ | 프론트 구독 켜기/끄기 UI — 백엔드 API만 있고 아직 미착수 |
 
 ### ⑧ 키워드 트렌드 시각화
 | 파트 | 담당 | 상태 | 비고 |
@@ -96,9 +96,9 @@
 
 | 항목 | 담당 | 상태 | 비고 |
 |------|------|------|------|
-| 배포 환경 구축 | whiteclover | ⬜ | Vercel(프론트) + Render/Railway(백엔드) |
+| 배포 환경 구축 | whiteclover | ✅ | Render(백엔드, dev 브랜치) + Vercel(프론트, production) + Neon(통합 브랜치) 연결, CORS 설정 및 시딩 데이터로 API 동작 확인 완료 |
 | 스케줄러 자동 실행 설정 | hoya | ⬜ | GitHub Actions cron 또는 APScheduler |
-| HTTPS / 도메인 | whiteclover | ⬜ | |
+| HTTPS / 도메인 | whiteclover | ✅ | Render/Vercel 기본 도메인 HTTPS 자동 적용 확인 (커스텀 도메인 계획 없음) |
 
 ---
 

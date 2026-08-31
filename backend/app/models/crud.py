@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.models.article import Article
 from app.models.category import Category
 from app.models.keyword import Keyword
+from app.models.push_subscription import PushSubscription
 
 
 def get_or_create_category(db: Session, *, name: str, slug: str) -> Category:
@@ -55,3 +56,25 @@ def upsert_article(
 
     db.flush()
     return article
+
+
+def subscribe_push(db: Session, *, endpoint: str, p256dh: str, auth: str) -> PushSubscription:
+    """endpoint가 이미 구독돼 있으면 키만 갱신해 재구독을 멱등하게 처리한다."""
+    subscription = db.query(PushSubscription).filter_by(endpoint=endpoint).one_or_none()
+    if subscription is None:
+        subscription = PushSubscription(endpoint=endpoint, p256dh=p256dh, auth=auth)
+        db.add(subscription)
+    else:
+        subscription.p256dh = p256dh
+        subscription.auth = auth
+    db.flush()
+    return subscription
+
+
+def unsubscribe_push(db: Session, *, endpoint: str) -> bool:
+    subscription = db.query(PushSubscription).filter_by(endpoint=endpoint).one_or_none()
+    if subscription is None:
+        return False
+    db.delete(subscription)
+    db.flush()
+    return True
