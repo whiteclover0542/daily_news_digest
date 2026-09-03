@@ -39,7 +39,9 @@ IT 카테고리로 DB 적재 후 원문 링크와 함께 표시
 - KST 오후 1시: 당일 게시 자료 보강 수집
 - 스케줄러는 Render 무료 서비스의 슬립 영향을 피하기 위해 GitHub Actions cron을 사용한다.
 
-## 공통 수집 형식
+## 수집 공통 규격
+
+### 1. 수집 단계의 중간값
 
 ```python
 CollectedArticle = {
@@ -47,12 +49,39 @@ CollectedArticle = {
     "source": "과학기술정보통신부",
     "url": str,
     "published_at": datetime,
-    "content": str,
+    "content": str,  # LLM 요약을 만들기 위한 원문, DB에는 저장하지 않음
     "source_category": "IT",
 }
 ```
 
-- URL은 정규화한 뒤 기존 `upsert_article()`의 중복 방지 키로 사용한다.
+### 2. 요약·DB 적재 단계
+
+수집한 `content`로 LLM 요약문(`summary`)과 선택 키워드(`keywords`)를 만든다. `articles` 테이블에는 원문 본문 컬럼이 없으므로, `content`는 수집·요약 과정에서만 사용한다.
+
+DB에 저장할 때는 문자열 `"IT"`가 아니라 아래처럼 Category 객체를 만들어 `upsert_article()`에 전달한다.
+
+```python
+category = get_or_create_category(db, name="IT", slug="it")
+
+upsert_article(
+    db,
+    title=article.title,
+    source=article.source,
+    url=normalized_url,
+    category=category,
+    summary=generated_summary,
+    published_at=article.published_at,
+    keywords=keywords,  # 선택
+)
+```
+
+### 3. URL 정규화·중복 기준
+
+- `url`은 `upsert_article()`의 중복 판별 키로 사용한다.
+- 주소 끝의 `/` 표기를 통일하고 `#...` 부분은 제거한다.
+- `utm_*` 같은 추적용 쿼리 파라미터만 제거한다.
+- 과기정통부 보도자료를 식별하는 데 필요한 쿼리 파라미터는 유지한다.
+
 - 요약에는 원문에 없는 배경·전망을 넣지 않는다.
 - 화면에는 출처와 원문 링크를 함께 표시한다.
 
