@@ -24,7 +24,7 @@
 | # | 항목 | 담당 | 상태 | 비고 |
 |---|------|------|------|------|
 | 0-1 | Git 레포 생성 & 문서 정비 | 공통 | ✅ | 폴더 구조, 기획서, docs/ 문서 정비 |
-| 0-2 | 뉴스 소스 조사 (RSS vs API) | hoya | ⬜ | 기획서 12장 체크리스트 |
+| 0-2 | 뉴스 소스 조사 (RSS vs API) | hoya | ✅ | MVP 소스: 과학기술정보통신부 IT 보도자료. RSS로 새 자료를 찾고, 상세 페이지·공개 첨부 PDF/HWPX 전문을 수집해 요약 |
 | 0-3 | DB 종류/스키마 확정 | 공통 | 🔵 | docs/db-schema.md — PostgreSQL로 확정, hoya 리뷰 필요 (PR #25) |
 | 0-4 | API 명세 확정 | 공통 | 🔵 | docs/api-spec.md — /news, /news/{id}, /categories 상세화, hoya 리뷰 필요 (PR #25) |
 | 0-5 | GitHub Issues/Projects 세팅 | 공통 | ✅ | 이슈 24개(#1~#24) + Projects 보드(Todo/In Progress/In Review/Done) 생성 완료 |
